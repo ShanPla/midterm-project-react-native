@@ -1,20 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import MainNavigator from './src/navigation/MainNavigator';
+import { JobProvider } from './src/context/JobContext';
+import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 
-export default function App() {
+function NavigationWrapper() {
+  const { isDarkMode, theme } = useTheme();
+
+  const navigationTheme = {
+    ...(isDarkMode ? DarkTheme : DefaultTheme),
+    colors: {
+      ...(isDarkMode ? DarkTheme.colors : DefaultTheme.colors),
+      background: theme.background,
+      card: theme.card,
+      text: theme.text,
+      border: theme.border,
+      primary: theme.primary,
+    },
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer theme={navigationTheme}>
+      <MainNavigator />
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <ThemeProvider>
+      <JobProvider>
+        <NavigationWrapper />
+      </JobProvider>
+    </ThemeProvider>
+  );
+}
