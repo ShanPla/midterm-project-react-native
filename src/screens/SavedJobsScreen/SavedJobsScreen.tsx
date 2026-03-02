@@ -7,9 +7,11 @@ import {
   ScrollView,
   Modal,
   SafeAreaView,
+  useWindowDimensions,
 } from 'react-native';
 import { useContext, useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
+import RenderHtml from 'react-native-render-html';
 import { JobContext } from '../../context/JobContext';
 import { Job } from '../../types/Job';
 import { useNavigation } from '@react-navigation/native';
@@ -23,6 +25,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SavedJobs'>
 
 export default function SavedJobsScreen() {
   const navigation = useNavigation<NavigationProp>();
+  const { width: contentWidth } = useWindowDimensions();
   const { savedJobs, removeJob } = useContext(JobContext);
   const { theme } = useTheme();
 
@@ -120,9 +123,21 @@ export default function SavedJobsScreen() {
                     ))}
                   </ScrollView>
                 )}
-                <Text style={[styles.modalDescription, { color: theme.subText }]}>
-                  {selectedJob.description.replace(/<[^>]+>/g, '')}
-                </Text>
+                <RenderHtml
+                  contentWidth={contentWidth}
+                  source={{ html: selectedJob.description }}
+                  tagsStyles={{
+                    p: { color: theme.subText, fontSize: 13, lineHeight: 21, marginBottom: 8 },
+                    li: { color: theme.subText, fontSize: 13, lineHeight: 21 },
+                    ul: { color: theme.subText, paddingLeft: 8 },
+                    ol: { color: theme.subText, paddingLeft: 8 },
+                    strong: { color: theme.text, fontWeight: '700' },
+                    h1: { color: theme.text, fontSize: 16, fontWeight: '700', marginBottom: 6 },
+                    h2: { color: theme.text, fontSize: 15, fontWeight: '700', marginBottom: 6 },
+                    h3: { color: theme.text, fontSize: 14, fontWeight: '700', marginBottom: 4 },
+                    body: { color: theme.subText },
+                  }}
+                />
                 <TouchableOpacity
                   style={[styles.modalApplyButton, { backgroundColor: theme.primary }]}
                   onPress={() => {

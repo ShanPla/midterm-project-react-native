@@ -9,9 +9,11 @@ import {
   SafeAreaView,
   BackHandler,
   Alert,
+  useWindowDimensions,
 } from 'react-native';
 import { useEffect, useState, useContext, useMemo, useCallback } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
+import RenderHtml from 'react-native-render-html';
 import { fetchJobs } from '../../services/jobService';
 import { Job } from '../../types/Job';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -25,15 +27,16 @@ import styles from './styles';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'JobFinder'>;
 type ToastType = 'saved' | 'already_applied';
-type FilterType = 'all' | 'saved' | 'applied';
+type FilterType = 'all' | 'applied';
 
 export default function JobFinderScreen() {
   const navigation = useNavigation<NavigationProp>();
+  const { width: contentWidth } = useWindowDimensions();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const { saveJob, removeJob, isSaved, isApplied, appliedJobIds } = useContext(JobContext);
-  const { theme, isDarkMode, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -73,9 +76,7 @@ export default function JobFinderScreen() {
     const query = searchQuery.trim().toLowerCase();
     let result = jobs;
 
-    if (activeFilter === 'saved') {
-      result = result.filter(job => isSaved(job.id));
-    } else if (activeFilter === 'applied') {
+    if (activeFilter === 'applied') {
       result = result.filter(job => isApplied(job.id));
     }
 
@@ -133,12 +134,10 @@ export default function JobFinderScreen() {
 
   const filters: { key: FilterType; label: string; icon: string }[] = [
     { key: 'all', label: 'All Jobs', icon: 'list' },
-    { key: 'saved', label: 'Saved', icon: 'bookmark' },
     { key: 'applied', label: 'Applied', icon: 'check-circle' },
   ];
 
   const emptyMessage =
-    activeFilter === 'saved' ? 'No saved jobs yet.' :
     activeFilter === 'applied' ? 'No applied jobs yet.' :
     `No jobs found for "${searchQuery}"`;
 
@@ -149,28 +148,14 @@ export default function JobFinderScreen() {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
 
-      {/* Action buttons */}
-      <View style={styles.topRow}>
-        <TouchableOpacity
-          onPress={toggleTheme}
-          style={[styles.topButton, { backgroundColor: theme.primary }]}
-        >
-          <FontAwesome
-            name={isDarkMode ? 'sun-o' : 'moon-o'}
-            size={13}
-            color="#fff"
-            style={styles.topButtonIcon}
-          />
-          <Text style={styles.topButtonText}>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.topButton, { backgroundColor: theme.primary }]}
-          onPress={() => navigation.navigate('SavedJobs')}
-        >
-          <FontAwesome name="bookmark" size={13} color="#fff" style={styles.topButtonIcon} />
-          <Text style={styles.topButtonText}>Saved Jobs</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Saved Jobs button — full width now that Dark Mode moved to navbar */}
+      <TouchableOpacity
+        style={[styles.savedJobsButton, { backgroundColor: theme.primary }]}
+        onPress={() => navigation.navigate('SavedJobs')}
+      >
+        <FontAwesome name="bookmark" size={13} color="#fff" style={styles.topButtonIcon} />
+        <Text style={styles.topButtonText}>Saved Jobs</Text>
+      </TouchableOpacity>
 
       {/* Search */}
       <SearchBar value={searchQuery} onChangeText={setSearchQuery} theme={theme} />
@@ -249,9 +234,21 @@ export default function JobFinderScreen() {
                     ))}
                   </ScrollView>
                 )}
-                <Text style={[styles.modalDescription, { color: theme.subText }]}>
-                  {selectedJob.description.replace(/<[^>]+>/g, '')}
-                </Text>
+                <RenderHtml
+                  contentWidth={contentWidth}
+                  source={{ html: selectedJob.description }}
+                  tagsStyles={{
+                    p: { color: theme.subText, fontSize: 13, lineHeight: 21, marginBottom: 8 },
+                    li: { color: theme.subText, fontSize: 13, lineHeight: 21 },
+                    ul: { color: theme.subText, paddingLeft: 8 },
+                    ol: { color: theme.subText, paddingLeft: 8 },
+                    strong: { color: theme.text, fontWeight: '700' },
+                    h1: { color: theme.text, fontSize: 16, fontWeight: '700', marginBottom: 6 },
+                    h2: { color: theme.text, fontSize: 15, fontWeight: '700', marginBottom: 6 },
+                    h3: { color: theme.text, fontSize: 14, fontWeight: '700', marginBottom: 4 },
+                    body: { color: theme.subText },
+                  }}
+                />
                 <TouchableOpacity
                   style={[styles.modalApplyButton, { backgroundColor: theme.primary }]}
                   onPress={() => {

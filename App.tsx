@@ -4,7 +4,7 @@ import { JobProvider } from './src/context/JobContext';
 import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 
 function NavigationWrapper() {
-  const { isDarkMode, theme } = useTheme();
+  const { isDarkMode, toggleTheme, theme } = useTheme();
 
   const navigationTheme = {
     ...(isDarkMode ? DarkTheme : DefaultTheme),
@@ -20,7 +20,7 @@ function NavigationWrapper() {
 
   return (
     <NavigationContainer theme={navigationTheme}>
-      <MainNavigator />
+      <MainNavigator isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
     </NavigationContainer>
   );
 }

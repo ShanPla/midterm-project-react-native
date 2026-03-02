@@ -7,20 +7,15 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
 
-  // Top buttons
-  topRow: {
+  // Saved Jobs button
+  savedJobsButton: {
     flexDirection: 'row',
-    gap: 8,
-    marginBottom: 12,
-  },
-  topButton: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingVertical: 9,
+    paddingVertical: 10,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
+    marginBottom: 12,
   },
   topButtonIcon: {
     marginRight: 2,
