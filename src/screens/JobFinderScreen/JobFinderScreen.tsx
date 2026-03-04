@@ -42,6 +42,7 @@ export default function JobFinderScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [toastType, setToastType] = useState<ToastType>('saved');
+  const [hideApplied, setHideApplied] = useState(false);
 
   useEffect(() => {
     const loadJobs = async () => {
@@ -78,6 +79,8 @@ export default function JobFinderScreen() {
 
     if (activeFilter === 'applied') {
       result = result.filter(job => isApplied(job.id));
+    } else if (hideApplied) {
+      result = result.filter(job => !isApplied(job.id));
     }
 
     if (query) {
@@ -90,7 +93,7 @@ export default function JobFinderScreen() {
     }
 
     return result;
-  }, [jobs, searchQuery, activeFilter, appliedJobIds]);
+  }, [jobs, searchQuery, activeFilter, appliedJobIds, hideApplied]);
 
   const showToast = (type: ToastType) => {
     setToastType(type);
@@ -148,7 +151,7 @@ export default function JobFinderScreen() {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
 
-      {/* Saved Jobs button — full width now that Dark Mode moved to navbar */}
+      {/* Saved Jobs button */}
       <TouchableOpacity
         style={[styles.savedJobsButton, { backgroundColor: theme.primary }]}
         onPress={() => navigation.navigate('SavedJobs')}
@@ -189,6 +192,30 @@ export default function JobFinderScreen() {
           );
         })}
       </View>
+
+      {/* Hide applied toggle — only visible on All Jobs filter */}
+      {activeFilter === 'all' && (
+        <TouchableOpacity
+          style={styles.hideAppliedRow}
+          onPress={() => setHideApplied(prev => !prev)}
+          activeOpacity={0.7}
+        >
+          <View style={[
+            styles.checkbox,
+            {
+              backgroundColor: hideApplied ? theme.primary : 'transparent',
+              borderColor: hideApplied ? theme.primary : theme.subText,
+            },
+          ]}>
+            {hideApplied && (
+              <FontAwesome name="check" size={10} color="#fff" />
+            )}
+          </View>
+          <Text style={[styles.hideAppliedText, { color: theme.subText }]}>
+            Hide applied jobs
+          </Text>
+        </TouchableOpacity>
+      )}
 
       {filteredJobs.length === 0 && (
         <Text style={[styles.noResults, { color: theme.subText }]}>{emptyMessage}</Text>

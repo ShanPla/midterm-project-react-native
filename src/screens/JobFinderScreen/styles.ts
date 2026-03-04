@@ -49,6 +49,26 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  // Hide applied toggle
+  hideAppliedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 10,
+  },
+  checkbox: {
+    width: 18,
+    height: 18,
+    borderRadius: 4,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  hideAppliedText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+
   noResults: {
     textAlign: 'center',
     marginVertical: 24,
