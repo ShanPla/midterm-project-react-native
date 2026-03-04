@@ -3,17 +3,13 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  ScrollView,
   Modal,
-  Image,
-  SafeAreaView,
   BackHandler,
   Alert,
   useWindowDimensions,
 } from 'react-native';
 import { useEffect, useState, useContext, useMemo, useCallback } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-import RenderHtml from 'react-native-render-html';
 import { fetchJobs } from '../../services/jobService';
 import { Job } from '../../types/Job';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -23,6 +19,7 @@ import { JobContext } from '../../context/JobContext';
 import { useTheme } from '../../context/ThemeContext';
 import JobCard from '../../components/JobCard/JobCard';
 import SearchBar from '../../components/SearchBar/SearchBar';
+import JobDetailModal from '../../components/JobDetailModal/JobDetailModal';
 import styles from './styles';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'JobFinder'>;
@@ -228,65 +225,14 @@ export default function JobFinderScreen() {
       />
 
       {/* Job Details Modal */}
-      <Modal visible={modalVisible} animationType="slide" onRequestClose={closeModal}>
-        <SafeAreaView style={[styles.modalContainer, { backgroundColor: theme.background }]}>
-          <View style={styles.modalHeader}>
-            <TouchableOpacity onPress={closeModal}>
-              <Text style={[styles.modalCloseText, { color: theme.danger }]}>✕</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView contentContainerStyle={styles.modalContent}>
-            {selectedJob && (
-              <>
-                {selectedJob.companyLogo && (
-                  <Image source={{ uri: selectedJob.companyLogo }} style={styles.modalLogo} />
-                )}
-                <Text style={[styles.modalTitle, { color: theme.text }]}>{selectedJob.title}</Text>
-                <Text style={[styles.modalCompany, { color: theme.primary }]}>{selectedJob.company}</Text>
-                <Text style={[styles.modalDetails, { color: theme.subText }]}>
-                  {selectedJob.location} · {selectedJob.workModel} · {selectedJob.seniorityLevel}
-                </Text>
-                {selectedJob.salary !== 'Not specified' && (
-                  <Text style={[styles.modalSalary, { color: theme.text }]}>{selectedJob.salary}</Text>
-                )}
-                {selectedJob.tags.length > 0 && (
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.modalTagContainer}>
-                    {selectedJob.tags.map(tag => (
-                      <View key={tag} style={[styles.tag, { backgroundColor: theme.border }]}>
-                        <Text style={[styles.tagText, { color: theme.subText }]}>{tag}</Text>
-                      </View>
-                    ))}
-                  </ScrollView>
-                )}
-                <RenderHtml
-                  contentWidth={contentWidth}
-                  source={{ html: selectedJob.description }}
-                  tagsStyles={{
-                    p: { color: theme.subText, fontSize: 13, lineHeight: 21, marginBottom: 8 },
-                    li: { color: theme.subText, fontSize: 13, lineHeight: 21 },
-                    ul: { color: theme.subText, paddingLeft: 8 },
-                    ol: { color: theme.subText, paddingLeft: 8 },
-                    strong: { color: theme.text, fontWeight: '700' },
-                    h1: { color: theme.text, fontSize: 16, fontWeight: '700', marginBottom: 6 },
-                    h2: { color: theme.text, fontSize: 15, fontWeight: '700', marginBottom: 6 },
-                    h3: { color: theme.text, fontSize: 14, fontWeight: '700', marginBottom: 4 },
-                    body: { color: theme.subText },
-                  }}
-                />
-                <TouchableOpacity
-                  style={[styles.modalApplyButton, { backgroundColor: theme.primary }]}
-                  onPress={() => {
-                    closeModal();
-                    navigation.navigate('Apply', { jobId: selectedJob.id });
-                  }}
-                >
-                  <Text style={styles.buttonText}>Apply Now</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </ScrollView>
-        </SafeAreaView>
-      </Modal>
+      <JobDetailModal
+        visible={modalVisible}
+        job={selectedJob}
+        theme={theme}
+        contentWidth={contentWidth}
+        onClose={closeModal}
+        onApply={(jobId) => navigation.navigate('Apply', { jobId })}
+      />
 
       {/* Toast */}
       <Modal visible={toastVisible} transparent animationType="fade">
