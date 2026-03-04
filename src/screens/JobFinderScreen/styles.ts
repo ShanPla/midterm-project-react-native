@@ -7,30 +7,12 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
 
-  // Saved Jobs button
-  savedJobsButton: {
-    flexDirection: 'row',
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    marginBottom: 12,
-  },
-  topButtonIcon: {
-    marginRight: 2,
-  },
-  topButtonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 13,
-  },
-
-  // Filter pills
+  // Filter row — pills + Saved Jobs on the right
   filterRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   filterPill: {
     flexDirection: 'row',
@@ -41,10 +23,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: 5,
   },
-  filterPillIcon: {
-    marginRight: 1,
-  },
   filterPillText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+
+  // Saved Jobs pill — right side of filter row
+  savedJobsPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 20,
+    gap: 5,
+  },
+  savedJobsPillText: {
+    color: '#fff',
     fontSize: 12,
     fontWeight: '600',
   },
@@ -139,11 +133,6 @@ const styles = StyleSheet.create({
   tagText: {
     fontSize: 10,
     fontWeight: '600',
-  },
-  modalDescription: {
-    fontSize: 13,
-    lineHeight: 21,
-    marginTop: 8,
   },
   modalApplyButton: {
     paddingVertical: 13,

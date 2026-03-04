@@ -52,7 +52,6 @@ export default function JobFinderScreen() {
     loadJobs();
   }, []);
 
-  // Back button exit confirmation — Android only
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
@@ -64,10 +63,8 @@ export default function JobFinderScreen() {
             { text: 'Exit', style: 'destructive', onPress: () => BackHandler.exitApp() },
           ]
         );
-        // Return true to prevent default back behavior
         return true;
       };
-
       const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
       return () => subscription.remove();
     }, [])
@@ -136,7 +133,7 @@ export default function JobFinderScreen() {
   );
 
   const filters: { key: FilterType; label: string; icon: string }[] = [
-    { key: 'all', label: 'All Jobs', icon: 'list' },
+    { key: 'all', label: 'All', icon: 'list' },
     { key: 'applied', label: 'Applied', icon: 'check-circle' },
   ];
 
@@ -151,19 +148,10 @@ export default function JobFinderScreen() {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
 
-      {/* Saved Jobs button */}
-      <TouchableOpacity
-        style={[styles.savedJobsButton, { backgroundColor: theme.primary }]}
-        onPress={() => navigation.navigate('SavedJobs')}
-      >
-        <FontAwesome name="bookmark" size={13} color="#fff" style={styles.topButtonIcon} />
-        <Text style={styles.topButtonText}>Saved Jobs</Text>
-      </TouchableOpacity>
-
       {/* Search */}
       <SearchBar value={searchQuery} onChangeText={setSearchQuery} theme={theme} />
 
-      {/* Filter pills */}
+      {/* Filter row: pills + Saved Jobs button on the right */}
       <View style={styles.filterRow}>
         {filters.map(f => {
           const isActive = activeFilter === f.key;
@@ -183,7 +171,6 @@ export default function JobFinderScreen() {
                 name={f.icon as any}
                 size={11}
                 color={isActive ? '#fff' : theme.subText}
-                style={styles.filterPillIcon}
               />
               <Text style={[styles.filterPillText, { color: isActive ? '#fff' : theme.subText }]}>
                 {f.label}
@@ -191,9 +178,21 @@ export default function JobFinderScreen() {
             </TouchableOpacity>
           );
         })}
+
+        {/* Spacer */}
+        <View style={{ flex: 1 }} />
+
+        {/* Saved Jobs — right side of filter row */}
+        <TouchableOpacity
+          style={[styles.savedJobsPill, { backgroundColor: theme.primary }]}
+          onPress={() => navigation.navigate('SavedJobs')}
+        >
+          <FontAwesome name="bookmark" size={11} color="#fff" />
+          <Text style={styles.savedJobsPillText}>Saved Jobs</Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Hide applied toggle — only visible on All Jobs filter */}
+      {/* Hide applied toggle — only on All Jobs filter */}
       {activeFilter === 'all' && (
         <TouchableOpacity
           style={styles.hideAppliedRow}
@@ -207,9 +206,7 @@ export default function JobFinderScreen() {
               borderColor: hideApplied ? theme.primary : theme.subText,
             },
           ]}>
-            {hideApplied && (
-              <FontAwesome name="check" size={10} color="#fff" />
-            )}
+            {hideApplied && <FontAwesome name="check" size={10} color="#fff" />}
           </View>
           <Text style={[styles.hideAppliedText, { color: theme.subText }]}>
             Hide applied jobs
@@ -255,8 +252,8 @@ export default function JobFinderScreen() {
                 {selectedJob.tags.length > 0 && (
                   <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.modalTagContainer}>
                     {selectedJob.tags.map(tag => (
-                      <View key={tag} style={[styles.tag, { backgroundColor: theme.primary + '18' }]}>
-                        <Text style={[styles.tagText, { color: theme.primary }]}>{tag}</Text>
+                      <View key={tag} style={[styles.tag, { backgroundColor: theme.border }]}>
+                        <Text style={[styles.tagText, { color: theme.subText }]}>{tag}</Text>
                       </View>
                     ))}
                   </ScrollView>
@@ -305,6 +302,7 @@ export default function JobFinderScreen() {
           </View>
         </View>
       </Modal>
+
     </View>
   );
 }

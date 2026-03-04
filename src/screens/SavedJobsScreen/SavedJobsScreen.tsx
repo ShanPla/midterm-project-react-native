@@ -117,8 +117,8 @@ export default function SavedJobsScreen() {
                 {selectedJob.tags.length > 0 && (
                   <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.modalTagContainer}>
                     {selectedJob.tags.map(tag => (
-                      <View key={tag} style={[styles.tag, { backgroundColor: theme.primary + '18' }]}>
-                        <Text style={[styles.tagText, { color: theme.primary }]}>{tag}</Text>
+                      <View key={tag} style={[styles.tag, { backgroundColor: theme.border }]}>
+                        <Text style={[styles.tagText, { color: theme.subText }]}>{tag}</Text>
                       </View>
                     ))}
                   </ScrollView>

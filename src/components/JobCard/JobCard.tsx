@@ -63,14 +63,12 @@ export default function JobCard({
         )}
 
         <View style={styles.topRight}>
-          {/* Applied badge */}
+          {/* Applied — bare checkmark icon, no pill */}
           {isApplied && (
-            <View style={[styles.appliedBadge, { backgroundColor: '#22c55e18' }]}>
-              <FontAwesome name="check-circle" size={12} color="#22c55e" />
-              <Text style={[styles.appliedBadgeText, { color: '#22c55e' }]}>Applied</Text>
-            </View>
+            <FontAwesome name="check-circle" size={22} color="#22c55e" />
           )}
 
+          {/* Bookmark — only shown when not applied */}
           {onSave !== undefined && !isApplied && (
             <TouchableOpacity style={styles.bookmarkButton} onPress={handleBookmarkPress}>
               <FontAwesome
@@ -102,8 +100,8 @@ export default function JobCard({
       {job.tags.length > 0 && (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tagContainer}>
           {job.tags.map(tag => (
-            <View key={tag} style={[styles.tag, { backgroundColor: theme.primary + '18' }]}>
-              <Text style={[styles.tagText, { color: theme.primary }]}>{tag}</Text>
+            <View key={tag} style={[styles.tag, { backgroundColor: theme.border }]}>
+              <Text style={[styles.tagText, { color: theme.subText }]}>{tag}</Text>
             </View>
           ))}
         </ScrollView>
@@ -111,10 +109,8 @@ export default function JobCard({
 
       <View style={styles.buttonRow}>
         {isApplied ? (
-          // Applied state — full width disabled button
           <View style={[styles.appliedButton, { backgroundColor: '#22c55e18' }]}>
-            <FontAwesome name="check-circle" size={14} color="#22c55e" />
-            <Text style={[styles.appliedButtonText, { color: '#22c55e' }]}>Application Submitted</Text>
+            <Text style={[styles.appliedButtonText, { color: '#22c55e' }]}>Applied ✓</Text>
           </View>
         ) : (
           <>
@@ -133,7 +129,7 @@ export default function JobCard({
           </>
         )}
 
-        {/* View Details still accessible even when applied */}
+        {/* View Details still accessible when applied */}
         {isApplied && (
           <TouchableOpacity
             style={[styles.viewDetailsButton, { backgroundColor: theme.primary + '18' }]}

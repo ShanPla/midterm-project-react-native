@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.06,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
-    position: 'relative',
   },
 
   // Top row
@@ -31,21 +30,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-
-  // Applied badge (top right, next to bookmark)
-  appliedBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 20,
-  },
-  appliedBadgeText: {
-    fontSize: 11,
-    fontWeight: '700',
-  },
-
   bookmarkButton: {
     padding: 4,
   },
@@ -76,7 +60,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 
-  // Tags
+  // Tags — neutral gray, no blue
   tagContainer: {
     flexDirection: 'row',
     marginBottom: 12,
@@ -86,10 +70,12 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 6,
     marginRight: 5,
+    backgroundColor: '#f0f0f0',
   },
   tagText: {
     fontSize: 10,
     fontWeight: '600',
+    color: '#555',
     letterSpacing: 0.2,
   },
 
