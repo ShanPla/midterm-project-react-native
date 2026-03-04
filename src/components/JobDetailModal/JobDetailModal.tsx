@@ -6,22 +6,31 @@ import {
   TouchableOpacity,
   Modal,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import RenderHtml from 'react-native-render-html';
 import { Job } from '../../types/Job';
-import { StyleSheet } from 'react-native';
 
 type Props = {
   visible: boolean;
   job: Job | null;
   theme: any;
   contentWidth: number;
+  isApplied?: boolean;
   onClose: () => void;
   onApply: (jobId: string) => void;
 };
 
-export default function JobDetailModal({ visible, job, theme, contentWidth, onClose, onApply }: Props) {
+export default function JobDetailModal({
+  visible,
+  job,
+  theme,
+  contentWidth,
+  isApplied = false,
+  onClose,
+  onApply,
+}: Props) {
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
@@ -69,15 +78,23 @@ export default function JobDetailModal({ visible, job, theme, contentWidth, onCl
                   body: { color: theme.subText },
                 }}
               />
-              <TouchableOpacity
-                style={[styles.applyButton, { backgroundColor: theme.primary }]}
-                onPress={() => {
-                  onClose();
-                  onApply(job.id);
-                }}
-              >
-                <Text style={styles.applyButtonText}>Apply Now</Text>
-              </TouchableOpacity>
+
+              {isApplied ? (
+                <View style={[styles.appliedButton, { backgroundColor: '#22c55e18' }]}>
+                  <FontAwesome name="check-circle" size={16} color="#22c55e" />
+                  <Text style={[styles.appliedButtonText, { color: '#22c55e' }]}>Applied ✓</Text>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.applyButton, { backgroundColor: theme.primary }]}
+                  onPress={() => {
+                    onClose();
+                    onApply(job.id);
+                  }}
+                >
+                  <Text style={styles.applyButtonText}>Apply Now</Text>
+                </TouchableOpacity>
+              )}
             </>
           )}
         </ScrollView>
@@ -159,6 +176,19 @@ const styles = StyleSheet.create({
   },
   applyButtonText: {
     color: '#fff',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  appliedButton: {
+    flexDirection: 'row',
+    paddingVertical: 13,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    gap: 8,
+  },
+  appliedButtonText: {
     fontWeight: '600',
     fontSize: 14,
   },

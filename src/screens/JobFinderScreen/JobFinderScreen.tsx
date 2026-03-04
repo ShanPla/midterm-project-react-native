@@ -230,6 +230,7 @@ export default function JobFinderScreen() {
         job={selectedJob}
         theme={theme}
         contentWidth={contentWidth}
+        isApplied={selectedJob ? isApplied(selectedJob.id) : false}
         onClose={closeModal}
         onApply={(jobId) => navigation.navigate('Apply', { jobId })}
       />

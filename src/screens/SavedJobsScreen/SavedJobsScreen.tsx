@@ -23,7 +23,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SavedJobs'>
 export default function SavedJobsScreen() {
   const navigation = useNavigation<NavigationProp>();
   const { width: contentWidth } = useWindowDimensions();
-  const { savedJobs, removeJob } = useContext(JobContext);
+  const { savedJobs, removeJob, isApplied } = useContext(JobContext);
   const { theme } = useTheme();
 
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
@@ -95,6 +95,7 @@ export default function SavedJobsScreen() {
         job={selectedJob}
         theme={theme}
         contentWidth={contentWidth}
+        isApplied={selectedJob ? isApplied(selectedJob.id) : false}
         onClose={closeModal}
         onApply={(jobId) => navigation.navigate('Apply', { jobId })}
       />
