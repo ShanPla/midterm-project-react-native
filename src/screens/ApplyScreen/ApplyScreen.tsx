@@ -38,7 +38,6 @@ export default function ApplyScreen() {
   const [contact, setContact] = useState('');
   const [reason, setReason] = useState('');
 
-  // Track which fields have been touched
   const [touched, setTouched] = useState({
     name: false,
     email: false,
@@ -48,12 +47,11 @@ export default function ApplyScreen() {
 
   // --- Validation ---
   const emailRegex = /^\S+@\S+\.\S+$/;
-  const phoneRegex = /^09[0-9]{9}$/;
 
   const errors = {
     name: !name.trim() ? 'Full name is required.' : '',
     email: !emailRegex.test(email) ? 'Enter a valid email address.' : '',
-    contact: !/^[0-9]{9}$/.test(contact) ? 'Must be 9 digits after 09.' : '',
+    contact: contact.length < 9 ? 'Enter a valid mobile number.' : '',
     reason: reason.trim().length < MIN_REASON_LENGTH
       ? `At least ${MIN_REASON_LENGTH} characters required.`
       : '',
@@ -62,27 +60,26 @@ export default function ApplyScreen() {
   const isFormValid = Object.values(errors).every(e => e === '');
   const isPristine = !name && !email && !contact && !reason;
 
-  // --- Handlers ---
-
-  // Formats 9 raw digits into XX-XXX-XXXX
+  // --- Contact formatting ---
+  // Stores raw digits (max 9), displays as XX-XXX-XXXX with dashes added as user types
   const formatContact = (digits: string): string => {
     if (digits.length <= 2) return digits;
     if (digits.length <= 5) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
     return `${digits.slice(0, 2)}-${digits.slice(2, 5)}-${digits.slice(5)}`;
   };
 
-  // Store raw digits, display formatted
   const handleContactChange = (text: string) => {
-    const digits = text.replace(/[^0-9]/g, '').slice(0, 9);
+    // Strip dashes and non-digits from formatted value to get raw digits
+    const digits = text.replace(/-/g, '').replace(/[^0-9]/g, '').slice(0, 9);
     setContact(digits);
   };
 
+  // --- Handlers ---
   const handleBlur = (field: keyof typeof touched) => {
     setTouched(prev => ({ ...prev, [field]: true }));
   };
 
   const handleSubmit = () => {
-    // Mark all fields as touched to show all errors
     setTouched({ name: true, email: true, contact: true, reason: true });
     if (!isFormValid) return;
 
@@ -179,8 +176,7 @@ export default function ApplyScreen() {
                 borderColor: touched.contact && errors.contact ? theme.danger : theme.border,
               },
             ]}>
-              <Text style={[styles.contactPrefix, { color: theme.text }]}>09</Text>
-              <View style={[styles.contactDivider, { backgroundColor: theme.border }]} />
+              <Text style={[styles.contactPrefix, { color: theme.text }]}>(+63) 9</Text>
               <TextInput
                 style={[styles.contactInput, { color: theme.text }]}
                 placeholder="XX-XXX-XXXX"
@@ -204,9 +200,7 @@ export default function ApplyScreen() {
               <Text style={[styles.label, { color: theme.subText }]}>Why should we hire you?</Text>
               <Text style={[
                 styles.charCount,
-                {
-                  color: reason.length < MIN_REASON_LENGTH ? theme.danger : '#22c55e',
-                },
+                { color: reason.length < MIN_REASON_LENGTH ? theme.danger : '#22c55e' },
               ]}>
                 {reason.length}/{MAX_REASON_LENGTH}
               </Text>

@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 14,
   },
-
-  // Contact number row — 09 prefix + divider + input
   contactRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -43,22 +41,19 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   contactPrefix: {
-    paddingHorizontal: 14,
+    paddingLeft: 14,
+    paddingRight: 0,
     paddingVertical: 12,
     fontSize: 14,
     fontWeight: '600',
   },
-  contactDivider: {
-    width: 1,
-    height: 20,
-  },
   contactInput: {
     flex: 1,
-    paddingHorizontal: 14,
+    paddingLeft: 2,
+    paddingRight: 14,
     paddingVertical: 12,
     fontSize: 14,
   },
-
   textArea: {
     paddingHorizontal: 14,
     paddingVertical: 12,
