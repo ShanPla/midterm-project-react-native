@@ -9,11 +9,11 @@ import {
 import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { Job } from '../../types/Job';
+import { useTheme } from '../../context/ThemeContext';
 import styles from './styles';
 
 type Props = {
   job: Job;
-  theme: any;
   onApply: () => void;
   onViewDetails: () => void;
   isApplied?: boolean;
@@ -27,7 +27,6 @@ type Props = {
 
 export default function JobCard({
   job,
-  theme,
   onApply,
   onViewDetails,
   isApplied = false,
@@ -36,6 +35,7 @@ export default function JobCard({
   isSaved,
   onRemove,
 }: Props) {
+  const { theme } = useTheme();
   const [unsaveModalVisible, setUnsaveModalVisible] = useState(false);
 
   const handleBookmarkPress = () => {
@@ -63,12 +63,10 @@ export default function JobCard({
         )}
 
         <View style={styles.topRight}>
-          {/* Applied — bare checkmark icon, no pill */}
           {isApplied && (
             <FontAwesome name="check-circle" size={22} color="#22c55e" />
           )}
 
-          {/* Bookmark — only shown when not applied */}
           {onSave !== undefined && !isApplied && (
             <TouchableOpacity style={styles.bookmarkButton} onPress={handleBookmarkPress}>
               <FontAwesome
@@ -129,7 +127,6 @@ export default function JobCard({
           </>
         )}
 
-        {/* View Details still accessible when applied */}
         {isApplied && (
           <TouchableOpacity
             style={[styles.viewDetailsButton, { backgroundColor: theme.primary + '18' }]}

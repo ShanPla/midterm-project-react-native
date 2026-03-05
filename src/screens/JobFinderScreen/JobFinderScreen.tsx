@@ -119,7 +119,6 @@ export default function JobFinderScreen() {
   const renderJob = ({ item }: { item: Job }) => (
     <JobCard
       job={item}
-      theme={theme}
       isApplied={isApplied(item.id)}
       onApply={() => navigation.navigate('Apply', { jobId: item.id })}
       onViewDetails={() => openModal(item)}
@@ -228,7 +227,6 @@ export default function JobFinderScreen() {
       <JobDetailModal
         visible={modalVisible}
         job={selectedJob}
-        theme={theme}
         contentWidth={contentWidth}
         isApplied={selectedJob ? isApplied(selectedJob.id) : false}
         onClose={closeModal}
