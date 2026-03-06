@@ -33,6 +33,9 @@ export default function ApplyScreen() {
   const { applyToJob } = useContext(JobContext);
 
   const scrollViewRef = useRef<ScrollView>(null);
+  const emailRef = useRef<TextInput>(null);
+  const contactRef = useRef<TextInput>(null);
+  const reasonRef = useRef<TextInput>(null);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -156,6 +159,7 @@ export default function ApplyScreen() {
               onBlur={() => handleBlur('name')}
               autoCapitalize="words"
               returnKeyType="next"
+              onSubmitEditing={() => emailRef.current?.focus()}
             />
             {touched.name && errors.name ? (
               <Text style={[styles.errorText, { color: theme.danger }]}>{errors.name}</Text>
@@ -166,6 +170,7 @@ export default function ApplyScreen() {
           <View style={styles.fieldWrapper}>
             <Text style={[styles.label, { color: theme.subText }]}>Email</Text>
             <TextInput
+              ref={emailRef}
               style={inputStyle('email')}
               placeholder="example@email.com"
               placeholderTextColor={theme.subText}
@@ -175,6 +180,7 @@ export default function ApplyScreen() {
               keyboardType="email-address"
               autoCapitalize="none"
               returnKeyType="next"
+              onSubmitEditing={() => contactRef.current?.focus()}
             />
             {touched.email && errors.email ? (
               <Text style={[styles.errorText, { color: theme.danger }]}>{errors.email}</Text>
@@ -193,6 +199,7 @@ export default function ApplyScreen() {
             ]}>
               <Text style={[styles.contactPrefix, { color: theme.text }]}>(+63) 9</Text>
               <TextInput
+                ref={contactRef}
                 style={[styles.contactInput, { color: theme.text }]}
                 placeholder="XX-XXX-XXXX"
                 placeholderTextColor={theme.subText}
@@ -202,6 +209,7 @@ export default function ApplyScreen() {
                 keyboardType="phone-pad"
                 maxLength={11}
                 returnKeyType="next"
+                onSubmitEditing={() => reasonRef.current?.focus()}
               />
             </View>
             {touched.contact && errors.contact ? (
@@ -221,6 +229,7 @@ export default function ApplyScreen() {
               </Text>
             </View>
             <TextInput
+              ref={reasonRef}
               style={[
                 styles.textArea,
                 {
