@@ -6,6 +6,40 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom: 40,
   },
+  // Job info card at top
+  jobCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 14,
+    borderRadius: 14,
+    borderWidth: 1,
+    marginBottom: 24,
+    gap: 12,
+  },
+  jobLogo: {
+    width: 48,
+    height: 48,
+    resizeMode: 'contain',
+    borderRadius: 8,
+  },
+  jobInfo: {
+    flex: 1,
+  },
+  jobTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 2,
+  },
+  jobCompany: {
+    fontSize: 13,
+    fontWeight: '500',
+    marginBottom: 2,
+  },
+  jobLocation: {
+    fontSize: 11,
+    opacity: 0.7,
+  },
+
   fieldWrapper: {
     marginBottom: 16,
   },
@@ -33,6 +67,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 14,
   },
+
+  // Contact number row
   contactRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -42,18 +78,23 @@ const styles = StyleSheet.create({
   },
   contactPrefix: {
     paddingLeft: 14,
-    paddingRight: 0,
+    paddingRight: 8,
     paddingVertical: 12,
     fontSize: 14,
     fontWeight: '600',
   },
+  contactDivider: {
+    width: 1,
+    height: 20,
+  },
   contactInput: {
     flex: 1,
-    paddingLeft: 2,
+    paddingLeft: 10,
     paddingRight: 14,
     paddingVertical: 12,
     fontSize: 14,
   },
+
   textArea: {
     paddingHorizontal: 14,
     paddingVertical: 12,

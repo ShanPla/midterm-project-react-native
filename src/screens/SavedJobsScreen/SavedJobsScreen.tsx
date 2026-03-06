@@ -61,7 +61,7 @@ export default function SavedJobsScreen() {
   const renderJob = ({ item }: { item: Job }) => (
     <JobCard
       job={item}
-      onApply={() => navigation.navigate('Apply', { jobId: item.id })}
+      onApply={() => navigation.navigate('Apply', { jobId: item.id, job: item })}
       onViewDetails={() => openModal(item)}
       onRemove={() => confirmDelete(item)}
     />
@@ -95,7 +95,7 @@ export default function SavedJobsScreen() {
         contentWidth={contentWidth}
         isApplied={selectedJob ? isApplied(selectedJob.id) : false}
         onClose={closeModal}
-        onApply={(jobId) => navigation.navigate('Apply', { jobId })}
+        onApply={(jobId) => navigation.navigate('Apply', { jobId, job: selectedJob! })}
       />
 
       {/* Delete Confirmation Modal */}

@@ -9,6 +9,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Image,
 } from 'react-native';
 import { useRef, useState, useContext } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -27,7 +28,7 @@ const MAX_REASON_LENGTH = 500;
 export default function ApplyScreen() {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<ApplyRouteProp>();
-  const { jobId } = route.params;
+  const { jobId, job } = route.params;
   const { theme } = useTheme();
   const { applyToJob } = useContext(JobContext);
 
@@ -51,7 +52,7 @@ export default function ApplyScreen() {
   const errors = {
     name: !name.trim() ? 'Full name is required.' : '',
     email: !emailRegex.test(email) ? 'Enter a valid email address.' : '',
-    contact: contact.length < 9 ? 'Enter a valid mobile number.' : '',
+    contact: contact.length < 9 ? 'Must be 9 digits after (+63) 9.' : '',
     reason: reason.trim().length < MIN_REASON_LENGTH
       ? `At least ${MIN_REASON_LENGTH} characters required.`
       : '',
@@ -61,7 +62,6 @@ export default function ApplyScreen() {
   const isPristine = !name && !email && !contact && !reason;
 
   // --- Contact formatting ---
-  // Stores raw digits (max 9), displays as XX-XXX-XXXX with dashes added as user types
   const formatContact = (digits: string): string => {
     if (digits.length <= 2) return digits;
     if (digits.length <= 5) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
@@ -69,7 +69,6 @@ export default function ApplyScreen() {
   };
 
   const handleContactChange = (text: string) => {
-    // Strip dashes and non-digits from formatted value to get raw digits
     const digits = text.replace(/-/g, '').replace(/[^0-9]/g, '').slice(0, 9);
     setContact(digits);
   };
@@ -128,6 +127,22 @@ export default function ApplyScreen() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
+
+          {/* Job Info Card */}
+          <View style={[styles.jobCard, { backgroundColor: theme.card, borderColor: theme.border }]}>
+            {job.companyLogo ? (
+              <Image source={{ uri: job.companyLogo }} style={styles.jobLogo} />
+            ) : (
+              <View style={[styles.jobLogo, { backgroundColor: theme.border, borderRadius: 8 }]} />
+            )}
+            <View style={styles.jobInfo}>
+              <Text style={[styles.jobTitle, { color: theme.text }]} numberOfLines={2}>{job.title}</Text>
+              <Text style={[styles.jobCompany, { color: theme.primary }]}>{job.company}</Text>
+              <Text style={[styles.jobLocation, { color: theme.subText }]}>
+                {job.location} · {job.workModel}
+              </Text>
+            </View>
+          </View>
 
           {/* Full Name */}
           <View style={styles.fieldWrapper}>

@@ -5,10 +5,12 @@ import JobFinderScreen from '../screens/JobFinderScreen/JobFinderScreen';
 import SavedJobsScreen from '../screens/SavedJobsScreen/SavedJobsScreen';
 import ApplyScreen from '../screens/ApplyScreen/ApplyScreen';
 
+import { Job } from '../types/Job';
+
 export type RootStackParamList = {
   JobFinder: undefined;
   SavedJobs: undefined;
-  Apply: { jobId: string };
+  Apply: { jobId: string; job: Job };
 };
 
 type Props = {

@@ -120,7 +120,7 @@ export default function JobFinderScreen() {
     <JobCard
       job={item}
       isApplied={isApplied(item.id)}
-      onApply={() => navigation.navigate('Apply', { jobId: item.id })}
+      onApply={() => navigation.navigate('Apply', { jobId: item.id, job: item })}
       onViewDetails={() => openModal(item)}
       onSave={() => handleSaveJob(item)}
       onUnsave={() => removeJob(item.id)}
@@ -232,7 +232,7 @@ export default function JobFinderScreen() {
         contentWidth={contentWidth}
         isApplied={selectedJob ? isApplied(selectedJob.id) : false}
         onClose={closeModal}
-        onApply={(jobId) => navigation.navigate('Apply', { jobId })}
+        onApply={(jobId) => navigation.navigate('Apply', { jobId, job: selectedJob! })}
       />
 
       {/* Toast */}
