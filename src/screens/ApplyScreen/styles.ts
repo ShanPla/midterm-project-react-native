@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   contactPrefix: {
     paddingLeft: 14,
-    paddingRight: 8,
+    paddingRight: 0,
     paddingVertical: 12,
     fontSize: 14,
     fontWeight: '600',
@@ -89,12 +89,11 @@ const styles = StyleSheet.create({
   },
   contactInput: {
     flex: 1,
-    paddingLeft: 10,
+    paddingLeft: 2,
     paddingRight: 14,
     paddingVertical: 12,
     fontSize: 14,
   },
-
   textArea: {
     paddingHorizontal: 14,
     paddingVertical: 12,
