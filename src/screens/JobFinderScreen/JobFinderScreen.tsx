@@ -32,7 +32,7 @@ export default function JobFinderScreen() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const { saveJob, removeJob, isSaved, isApplied, appliedJobIds } = useContext(JobContext);
+  const { saveJob, removeJob, isSaved, isApplied, appliedJobIds, savedJobs } = useContext(JobContext);
   const { theme } = useTheme();
 
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
@@ -184,7 +184,9 @@ export default function JobFinderScreen() {
           onPress={() => navigation.navigate('SavedJobs')}
         >
           <FontAwesome name="bookmark" size={11} color="#fff" />
-          <Text style={styles.savedJobsPillText}>Saved Jobs</Text>
+          <Text style={styles.savedJobsPillText}>
+            Saved Jobs{savedJobs.length > 0 ? ` (${savedJobs.length})` : ''}
+          </Text>
         </TouchableOpacity>
       </View>
 
