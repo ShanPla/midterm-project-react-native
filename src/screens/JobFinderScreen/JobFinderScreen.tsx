@@ -34,6 +34,7 @@ export default function JobFinderScreen() {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const { saveJob, removeJob, isSaved, isApplied, appliedJobIds, savedJobs } = useContext(JobContext);
   const { theme } = useTheme();
+  const [loading, setLoading] = useState(true);
 
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,6 +46,7 @@ export default function JobFinderScreen() {
     const loadJobs = async () => {
       const data = await fetchJobs();
       setJobs(data);
+      setLoading(false);
     };
     loadJobs();
   }, []);
@@ -212,9 +214,11 @@ export default function JobFinderScreen() {
         </TouchableOpacity>
       )}
 
-      {filteredJobs.length === 0 && (
+      {loading ? (
+        <Text style={[styles.noResults, { color: theme.subText }]}>Loading jobs...</Text>
+      ) : filteredJobs.length === 0 ? (
         <Text style={[styles.noResults, { color: theme.subText }]}>{emptyMessage}</Text>
-      )}
+      ) : null}
 
       <FlatList
         data={filteredJobs}
